@@ -3,9 +3,10 @@
 A modern, professional-grade Android e-commerce and grocery shopping application designed for local fresh produce delivery (Mama Mboga), built with Kotlin and Material Design 3.
 
 ## 📱 App Screenshots
-<p align="center">
-  <img src="screenshots/app_screenshot.png" alt="Mama Mboga App Screenshot" width="300"/>
-</p>
+
+| Main Store Catalog | Store Stats & Analytics | Payment Gateway (M-Pesa) |
+| :---: | :---: | :---: |
+| ![Main UI](screenshots/app_screenshot.png) | ![Stats Dashboard](screenshots/stats_screenshot.png) | ![Payment Gateway](screenshots/payment_screenshot.png) |
 
 ## ✨ Professional Features
 - **Modern Material 3 UI**: Card-based product presentation with smooth elevations and a fresh grocery green theme (`MaterialCardView`).
