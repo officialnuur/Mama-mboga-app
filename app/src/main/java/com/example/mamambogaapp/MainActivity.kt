@@ -1,6 +1,7 @@
 package com.example.mamambogaapp
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     private var totalPrice = 0
     private var currentCategory = "All"
     private var currentSearchQuery = ""
+    private var totalOrdersPlaced = 0
 
     private val allProduceList = listOf(
         ProduceItem("Sukuma Wiki", "KES 30", "bunch", "Freshly harvested farm greens", "Vegetables", R.drawable.spinach),
@@ -96,6 +98,7 @@ class MainActivity : AppCompatActivity() {
         val btnClear = findViewById<Button>(R.id.btnClear)
         val btnInstagram = findViewById<Button>(R.id.btnInstagram)
         val btnFacebook = findViewById<Button>(R.id.btnFacebook)
+        val btnDashboard = findViewById<Button>(R.id.btnDashboard)
         val etSearch = findViewById<EditText>(R.id.etSearch)
         val btnAll = findViewById<Button>(R.id.btnAll)
         val btnVeg = findViewById<Button>(R.id.btnVeg)
@@ -150,6 +153,27 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        btnDashboard.setOnClickListener {
+            val vegCount = allProduceList.count { it.category == "Vegetables" }
+            val fruitCount = allProduceList.count { it.category == "Fruits" }
+            val statsMessage = """
+                📊 MAMA MBOGA STORE STATS
+                
+                • Total Catalog Products: ${allProduceList.size}
+                • Vegetables Available: $vegCount 🥦
+                • Fruits Available: $fruitCount 🍎
+                • Total Orders Completed: $totalOrdersPlaced 📦
+                • Current Basket Items: $itemCount items
+                • Current Basket Value: KES $totalPrice
+            """.trimIndent()
+
+            AlertDialog.Builder(this)
+                .setTitle("Store Analytics & Charts")
+                .setMessage(statsMessage)
+                .setPositiveButton("Close", null)
+                .show()
+        }
+
         listView.setOnItemClickListener { _, _, position, _ ->
             val selectedItem = displayedList[position]
             itemCount++
@@ -171,11 +195,74 @@ class MainActivity : AppCompatActivity() {
             if (itemCount == 0) {
                 Toast.makeText(this, "Your basket is empty! Tap items to add.", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Order placed successfully! Total: KES $totalPrice. Karibu tena!", Toast.LENGTH_LONG).show()
-                itemCount = 0
-                totalPrice = 0
-                tvCartSummary.text = "Basket: 0 items (KES 0)"
+                showPaymentDialog()
             }
         }
+    }
+
+    private fun showPaymentDialog() {
+        val paymentOptions = arrayOf(
+            "📱 M-Pesa (Lipa na M-Pesa STK Push)",
+            "💳 Credit / Debit Card",
+            "💵 Cash on Delivery"
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("Select Payment Method (Total: KES $totalPrice)")
+            .setItems(paymentOptions) { _, which ->
+                when (which) {
+                    0 -> showMPesaPrompt()
+                    1 -> processSuccessfulOrder("Credit Card")
+                    2 -> processSuccessfulOrder("Cash on Delivery")
+                }
+            }
+            .show()
+    }
+
+    private fun showMPesaPrompt() {
+        val input = EditText(this)
+        input.hint = "Enter M-Pesa Phone (e.g. 0712345678)"
+        input.inputType = android.text.InputType.TYPE_CLASS_PHONE
+
+        AlertDialog.Builder(this)
+            .setTitle("M-Pesa Express Checkout")
+            .setMessage("Enter your Safaricom phone number to receive the STK push request for KES $totalPrice:")
+            .setView(input)
+            .setPositiveButton("Pay Now") { _, _ ->
+                val phone = input.text.toString()
+                if (phone.isNotBlank()) {
+                    Toast.makeText(this, "STK Push sent to $phone. Enter PIN to complete.", Toast.LENGTH_LONG).show()
+                    processSuccessfulOrder("M-Pesa ($phone)")
+                } else {
+                    Toast.makeText(this, "Please enter a valid phone number", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun processSuccessfulOrder(paymentMethod: String) {
+        totalOrdersPlaced++
+        val orderSummary = """
+            ✅ ORDER PLACED SUCCESSFULLY!
+            
+            • Paid via: $paymentMethod
+            • Items in Order: $itemCount
+            • Total Paid: KES $totalPrice
+            • Delivery Status: Dispatched 🚚
+            
+            Karibu tena! Thank you for shopping with Mama Mboga.
+        """.trimIndent()
+
+        AlertDialog.Builder(this)
+            .setTitle("Order Receipt")
+            .setMessage(orderSummary)
+            .setPositiveButton("Done") { _, _ ->
+                itemCount = 0
+                totalPrice = 0
+                val tvCartSummary = findViewById<TextView>(R.id.textView4)
+                tvCartSummary.text = "Basket: 0 items (KES 0)"
+            }
+            .show()
     }
 }

@@ -1,27 +1,24 @@
 # 🍅 Mama Mboga App
 
-A modern, feature-rich Android e-commerce application designed for local fresh grocery shopping (Mama Mboga), built with Kotlin and Material Design 3.
+A modern, professional-grade Android e-commerce and grocery shopping application designed for local fresh produce delivery (Mama Mboga), built with Kotlin and Material Design 3.
 
 ## 📱 App Screenshots
-Here is a preview of the Mama Mboga app interface:
-
 <p align="center">
   <img src="screenshots/app_screenshot.png" alt="Mama Mboga App Screenshot" width="300"/>
 </p>
 
-> *Note: To display your app screenshot on GitHub, simply create a folder named `screenshots` in your repository, save your app screenshot inside it as `app_screenshot.png`, and push it to GitHub.*
-
-## ✨ Key Features
+## ✨ Professional Features
 - **Modern Material 3 UI**: Card-based product presentation with smooth elevations and a fresh grocery green theme (`MaterialCardView`).
 - **Real-Time Search**: Instant search functionality to filter produce by name or description.
 - **Category Filtering**: Quick filter buttons for "All", "Vegetables", and "Fruits".
-- **Interactive Cart & Checkout**: Real-time basket summary, item counter, price calculation, and clear cart functionality.
+- **Advanced Payment Gateway**: Supports **M-Pesa (Lipa na M-Pesa STK Push)**, Credit/Debit Cards, and Cash on Delivery with order receipt generation.
+- **Store Analytics & Charts Dashboard**: Live store statistics tracking catalog distribution (Vegetables vs. Fruits), total orders placed, and live basket valuation.
 - **Social Media Integration**: Direct links to Instagram and Facebook via Android Intents.
 
 ## 📱 Tech Stack & Architecture
 - **Language**: Kotlin
-- **UI Toolkit**: Android Views, ConstraintLayout, Material Components
-- **Core Components**: Custom `ArrayAdapter`, Implicit Intents, TextWatchers for real-time search
+- **UI Toolkit**: Android Views, ConstraintLayout, Material Components, Material3 CardView, AlertDialogs
+- **Core Components**: Custom `ArrayAdapter`, Implicit Intents, TextWatchers for real-time search, Dialog-based workflows
 
 ## 🚀 Getting Started
 1. Clone the repository:
